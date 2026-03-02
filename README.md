@@ -51,6 +51,20 @@ openclaw plugins enable canvas-lms
 - `sync_academic_digest` returns a digest payload; publication to Discord/Teams/WhatsApp/Telegram should be done by host automation/workflows.
 - This plugin is designed to be maintained outside `openclaw/openclaw` and listed under community plugins.
 
+## Architecture
+
+```mermaid
+flowchart LR
+  User[Operator / Agent] -->|tool call| Gateway[OpenClaw Gateway]
+  Gateway --> Plugin[canvas-lms plugin]
+  Plugin -->|resolve auth| Auth[OAuth refresh or token]
+  Auth --> Secrets[Secure config/env storage]
+  Plugin -->|HTTPS requests| CanvasAPI[Canvas LMS REST API]
+  CanvasAPI --> Plugin
+  Plugin --> Gateway
+  Gateway --> User
+```
+
 ## License
 
 MIT
