@@ -62,6 +62,9 @@
       "allowInsecureHttp": {
         "type": "boolean"
       },
+      "allowBaseUrlOverride": {
+        "type": "boolean"
+      },
       "digestPublishSessionKeys": {
         "type": "array",
         "items": {
@@ -99,6 +102,9 @@
     },
     "allowInsecureHttp": {
       "label": "Allow Insecure HTTP"
+    },
+    "allowBaseUrlOverride": {
+      "label": "Allow Base URL Override"
     },
     "digestPublishSessionKeys": {
       "label": "Academic Digest Publish Session Keys"

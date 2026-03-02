@@ -8,6 +8,7 @@ Architecture and security posture:
 - Enforces HTTPS by default for Canvas endpoints and OAuth token exchange.
 - Defaults to safer auth paths (OAuth or config/env token) and blocks inline token usage unless explicitly enabled.
 - Applies bounded retries/timeouts and pagination limits to reduce abuse and runaway calls.
+- Requires a configured Canvas base URL by default (per-call override is disabled unless explicitly enabled).
 
 ## Install
 
@@ -45,6 +46,8 @@ openclaw plugins enable canvas-lms
 
 - HTTPS is expected by default.
 - Keep `allowInlineToken` disabled unless you explicitly need legacy behavior.
+- Prefer OAuth with a Canvas Developer Key and minimum required scopes for multi-user deployments.
+- Avoid reusing personal access tokens across multiple users or tenants.
 - `sync_academic_digest` returns a digest payload; publication to Discord/Teams/WhatsApp/Telegram should be done by host automation/workflows.
 - This plugin is designed to be maintained outside `openclaw/openclaw` and listed under community plugins.
 

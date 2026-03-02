@@ -35,6 +35,7 @@ type CanvasLmsPluginConfig = {
   maxRetries?: number;
   allowInlineToken?: boolean;
   allowInsecureHttp?: boolean;
+  allowBaseUrlOverride?: boolean;
   digestPublishSessionKeys?: string[];
 };
 
@@ -117,6 +118,37 @@ function readStringArray(value: unknown): string[] {
     .filter((item) => typeof item === "string")
     .map((item) => item.trim())
     .filter((item) => item.length > 0);
+}
+
+function redactSensitive(text: string): string {
+  return text
+    .replace(/(\"access_token\"\\s*:\\s*\")[^\"]+(\"?)/gi, "$1[redacted]$2")
+    .replace(/(\"refresh_token\"\\s*:\\s*\")[^\"]+(\"?)/gi, "$1[redacted]$2")
+    .replace(/(\"client_secret\"\\s*:\\s*\")[^\"]+(\"?)/gi, "$1[redacted]$2")
+    .replace(/(\"authorization\"\\s*:\\s*\")[^\"]+(\"?)/gi, "$1[redacted]$2");
+}
+
+function resolveBaseUrl(params: {
+  args: Record<string, unknown>;
+  pluginConfig: CanvasLmsPluginConfig;
+  allowInsecureHttp: boolean;
+}): string {
+  const configured =
+    readConfigString(params.pluginConfig.baseUrl) ??
+    readConfigString(process.env.CANVAS_LMS_BASE_URL) ??
+    "";
+  const requested = readString(params.args, "baseUrl");
+  if (!configured && !requested) {
+    throw new Error("Canvas baseUrl must be configured in plugin config or CANVAS_LMS_BASE_URL.");
+  }
+  if (requested && params.pluginConfig.allowBaseUrlOverride !== true) {
+    throw new Error(
+      "baseUrl override is disabled. Configure baseUrl in plugin config or set allowBaseUrlOverride=true.",
+    );
+  }
+  const selected =
+    requested && params.pluginConfig.allowBaseUrlOverride === true ? requested : configured;
+  return normalizeBaseUrl(selected ?? "", { allowInsecureHttp: params.allowInsecureHttp });
 }
 
 function readPerPage(params: Record<string, unknown>, configured?: number): number {
@@ -353,7 +385,10 @@ async function refreshOAuthToken(params: {
   if (!response.ok) {
     const body = await response.text().catch(() => "");
     throw new Error(
-      `Canvas OAuth refresh failed (${response.status} ${response.statusText}): ${body.slice(0, 180)}`,
+      `Canvas OAuth refresh failed (${response.status} ${response.statusText}): ${redactSensitive(body).slice(
+        0,
+        180,
+      )}`,
     );
   }
   const payload = (await response.json()) as {
@@ -507,7 +542,10 @@ async function fetchPaginatedArray(params: {
     if (!response.ok) {
       const body = await response.text().catch(() => "");
       throw new Error(
-        `Canvas request failed (${response.status} ${response.statusText}): ${body.slice(0, 240)}`,
+        `Canvas request failed (${response.status} ${response.statusText}): ${redactSensitive(body).slice(
+          0,
+          240,
+        )}`,
       );
     }
     const payload = (await response.json()) as unknown;
@@ -618,13 +656,7 @@ export function createCanvasLmsTool(api: OpenClawPluginApi) {
       const allowInsecureHttp =
         pluginConfig.allowInsecureHttp === true ||
         process.env.CANVAS_LMS_ALLOW_INSECURE_HTTP === "1";
-      const baseUrl = normalizeBaseUrl(
-        readString(args, "baseUrl") ??
-          pluginConfig.baseUrl ??
-          process.env.CANVAS_LMS_BASE_URL ??
-          "",
-        { allowInsecureHttp },
-      );
+      const baseUrl = resolveBaseUrl({ args, pluginConfig, allowInsecureHttp });
       const timeoutMs = readPositiveInt(pluginConfig.requestTimeoutMs, {
         fallback: DEFAULT_TIMEOUT_MS,
         min: 1_000,
@@ -1009,4 +1041,6 @@ export const __test = {
   resolveOAuthConfig,
   shouldRefreshToken,
   fetchPaginatedArray,
+  redactSensitive,
+  resolveBaseUrl,
 };
