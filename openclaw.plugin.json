@@ -81,6 +81,18 @@
     "oauth": {
       "label": "Canvas OAuth2 Settings"
     },
+    "oauth.clientSecret": {
+      "sensitive": true,
+      "label": "Canvas OAuth Client Secret"
+    },
+    "oauth.refreshToken": {
+      "sensitive": true,
+      "label": "Canvas OAuth Refresh Token"
+    },
+    "oauth.accessToken": {
+      "sensitive": true,
+      "label": "Canvas OAuth Access Token"
+    },
     "baseUrl": {
       "label": "Canvas Base URL",
       "placeholder": "https://canvas.example.edu"

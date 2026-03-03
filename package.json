@@ -1,5 +1,5 @@
 {
-  "name": "openclaw-canvas-lms",
+  "name": "@kansodata/openclaw-canvas-lms",
   "version": "0.1.0",
   "description": "Third-party Canvas LMS plugin for OpenClaw",
   "type": "module",
@@ -20,6 +20,22 @@
     "lms",
     "education"
   ],
+  "files": [
+    "index.ts",
+    "src",
+    "openclaw.plugin.json",
+    "README.md",
+    "SECURITY.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "verify": "node scripts/verify-config.mjs && node scripts/verify-no-secrets.mjs && npm pack --dry-run --json"
+  },
   "peerDependencies": {
     "openclaw": ">=2026.1.0"
   },

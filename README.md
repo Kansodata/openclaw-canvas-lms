@@ -2,6 +2,13 @@
 
 Third-party Canvas LMS plugin for OpenClaw, maintained by Kansodata.
 
+## Support and compatibility
+
+- Maintainer: Kansodata.
+- Distribution: npm package `@kansodata/openclaw-canvas-lms`.
+- Expected runtime: Node 22+.
+- OpenClaw compatibility target: `openclaw >= 2026.1.0` (see `peerDependencies`).
+
 Architecture and security posture:
 
 - Uses only public plugin APIs (`openclaw/plugin-sdk`), no internal `src/*` imports.
@@ -50,6 +57,14 @@ openclaw plugins enable canvas-lms
 - Avoid reusing personal access tokens across multiple users or tenants.
 - `sync_academic_digest` returns a digest payload; publication to Discord/Teams/WhatsApp/Telegram should be done by host automation/workflows.
 - This plugin is designed to be maintained outside `openclaw/openclaw` and listed under community plugins.
+
+## Risk controls
+
+- Run `npm run verify` before each tag/release.
+- Keep credentials out of source code and examples.
+- Prefer OAuth2 for multi-user deployments.
+- Use per-tenant/per-institution configuration boundaries.
+- Review dependency updates and publish notes with each release.
 
 ## Architecture
 
