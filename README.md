@@ -91,6 +91,37 @@ flowchart LR
   Gateway --> User
 ```
 
+## Project positioning
+
+### Community Edition
+
+This repository is maintained by Kansodata as the Community Edition of the Canvas LMS integration for OpenClaw.
+It provides the public open-source foundation of the integration.
+
+### Commercial / Enterprise offering
+
+Kansodata may offer separate commercial or institutional services around this integration, including:
+
+- implementation services
+- managed deployments
+- enterprise hardening
+- institutional integrations
+- support and SLA-backed operations
+- custom features
+- hosted or private deployments
+
+Public availability of this repository does not imply that all present or future Kansodata offerings are released under the same terms.
+
+### Licensing clarification
+
+This public repository remains licensed under MIT, as declared in this project.
+That license applies to the code and materials published in this repository.
+
+### Branding and trademarks
+
+Kansodata and related branding are reserved by their respective owner.
+The open-source license for this repository does not grant trademark rights.
+
 ## License
 
 MIT
