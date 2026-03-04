@@ -1,0 +1,50 @@
+{
+  // Example only. Do not commit real credentials.
+  // This plugin repo does NOT configure the Teams channel itself.
+  // Teams channel setup is done in OpenClaw host configuration.
+  "plugins": {
+    "entries": {
+      "canvas-lms": {
+        "enabled": true,
+        "config": {
+          "baseUrl": "https://canvas.example.edu",
+
+          // Prefer OAuth in multi-user deployments.
+          // Use token only for local/single-user tests.
+          "token": "<CANVAS_API_TOKEN_PLACEHOLDER>",
+
+          "requestTimeoutMs": 20000,
+          "maxRetries": 2,
+          "defaultPerPage": 25,
+          "maxPages": 5,
+
+          // Keep secure defaults unless you have a controlled exception.
+          "allowInlineToken": false,
+          "allowInsecureHttp": false,
+          "allowBaseUrlOverride": false
+        }
+      }
+    }
+  },
+
+  // Conceptual host automation flow (outside this plugin runtime):
+  // 1) Receive Teams DM intent: "What's due today?"
+  // 2) Call canvas_lms with action=sync_academic_digest, range=today
+  // 3) Format returned digest payload
+  // 4) Send formatted DM response through Teams channel in host
+  "automationExample": {
+    "intent": "due_today",
+    "toolCall": {
+      "tool": "canvas_lms",
+      "args": {
+        "action": "sync_academic_digest",
+        "range": "today"
+      }
+    },
+    "delivery": {
+      "channel": "msteams",
+      "mode": "dm",
+      "targetUserId": "<TEAMS_USER_ID_PLACEHOLDER>"
+    }
+  }
+}
