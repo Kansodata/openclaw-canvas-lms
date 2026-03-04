@@ -61,6 +61,14 @@ Plugin id: `canvas-lms`
 - `sync_academic_digest` returns a digest payload; publication to Discord/Teams/WhatsApp/Telegram should be done by host automation/workflows.
 - This plugin is designed to be maintained outside `openclaw/openclaw` and listed under community plugins.
 
+## Teams Academic Chat (MVP)
+
+- Guide: `docs/msteams-academic-chat-mvp.md`
+- Config example: `examples/openclaw-config.canvas-msteams.jsonc`
+- Intent examples: `examples/chat-intents.md`
+
+Important: this plugin returns digest/data payloads (including `sync_academic_digest`) and does not publish directly to Teams. Delivery to Teams DM should be implemented in host-side automation/workflows.
+
 ## Risk controls
 
 - Run `npm run verify` before each tag/release.
