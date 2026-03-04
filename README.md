@@ -20,7 +20,7 @@ Architecture and security posture:
 ## Install
 
 ```bash
-openclaw plugins install openclaw-canvas-lms
+openclaw plugins install @kansodata/openclaw-canvas-lms --pin
 ```
 
 ## Enable
@@ -28,6 +28,9 @@ openclaw plugins install openclaw-canvas-lms
 ```bash
 openclaw plugins enable canvas-lms
 ```
+
+Package name: `@kansodata/openclaw-canvas-lms`  
+Plugin id: `canvas-lms`
 
 ## Minimal config
 
